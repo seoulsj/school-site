@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>게시글 상세보기</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer>
+    const postId = localStorage.getItem("currentPostId");
+    const posts = JSON.parse(localStorage.getItem("freeboardPosts")) || [];
+    const post = posts.find(p => p.id == postId);
+    const isAdmin = localStorage.getItem("isAdmin") === "true";
+
+    window.onload = () => {
+      if (post) {
+        document.getElementById("post-title").textContent = post.title;
+        document.getElementById("post-meta").textContent = `작성자: ${post.author} | 작성일: ${post.date}`;
+        document.getElementById("post-content").textContent = post.content;
+        if (isAdmin) {
+          document.getElementById("delete-post-btn").style.display = "inline-block";
+        }
+      } else {
+        document.getElementById("post-title").textContent = "게시글을 찾을 수 없습니다.";
+        document.getElementById("post-content").textContent = "삭제되었거나 존재하지 않는 글입니다.";
+      }
+
+      renderComments();
+    };
+
+    function deletePost() {
+      if (!confirm("게시글을 삭제하시겠습니까?")) return;
+      let posts = JSON.parse(localStorage.getItem("freeboardPosts")) || [];
+      posts = posts.filter(p => p.id != postId);
+      localStorage.setItem("freeboardPosts", JSON.stringify(posts));
+      alert("게시글이 삭제되었습니다.");
+      window.location.href = "board.html";
+    }
+
+    function addComment() {
+      const input = document.getElementById("comment-input");
+      const content = input.value.trim();
+      if (!content) return;
+
+      const comments = JSON.parse(localStorage.getItem(`comments-${postId}`)) || [];
+      comments.push({ text: content, date: new Date().toLocaleString() });
+      localStorage.setItem(`comments-${postId}`, JSON.stringify(comments));
+      input.value = "";
+      renderComments();
+    }
+
+    function deleteComment(index) {
+      if (!confirm("댓글을 삭제하시겠습니까?")) return;
+      let comments = JSON.parse(localStorage.getItem(`comments-${postId}`)) || [];
+      comments.splice(index, 1);
+      localStorage.setItem(`comments-${postId}`, JSON.stringify(comments));
+      renderComments();
+    }
+
+    function renderComments() {
+      const comments = JSON.parse(localStorage.getItem(`comments-${postId}`)) || [];
+      const list = document.getElementById("comment-list");
+      list.innerHTML = "";
+
+      comments.forEach((c, i) => {
+        const div = document.createElement("div");
+        div.className = "comment-item";
+        div.innerHTML = `
+          <p>${c.text}</p>
+          <small>${c.date}</small>
+          ${isAdmin ? `<button onclick="deleteComment(${i})">삭제</button>` : ""}
+        `;
+        list.appendChild(div);
+      });
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="location.href='index.html'">📢 서울세종고등학교 소식 알리미</div>
+  </header>
+
+  <main class="post-container">
+    <div class="post-title" id="post-title"></div>
+    <div class="post-meta" id="post-meta"></div>
+    <div class="post-content" id="post-content"></div>
+    <button id="delete-post-btn" onclick="deletePost()" style="display:none;">게시글 삭제</button>
+
+    <section class="comments">
+      <h3>댓글</h3>
+      <div class="comment-box">
+        <textarea id="comment-input" placeholder="댓글을 입력하세요"></textarea>
+        <button onclick="addComment()">댓글 작성</button>
+      </div>
+      <div class="comment-list" id="comment-list"></div>
+    </section>
+  </main>
+</body>
+</html>

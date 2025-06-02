@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>지난 소식</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => {
+      const events = JSON.parse(localStorage.getItem("events")) || [];
+      const today = new Date();
+
+      const list = document.getElementById("past-event-list");
+      list.innerHTML = "";
+
+      const pastEvents = events.filter(e => new Date(e.date) < today);
+
+      if (pastEvents.length === 0) {
+        list.innerHTML = "<p>지난 소식이 없습니다.</p>";
+        return;
+      }
+
+      pastEvents.forEach(event => {
+        const div = document.createElement("div");
+        div.className = "preview-card";
+        div.innerHTML = `
+          <h3>${event.title}</h3>
+          <p>${event.date}</p>
+          <p>${event.content.slice(0, 80)}...</p>
+        `;
+        list.appendChild(div);
+      });
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="location.href='index.html'">
+      📢 서울세종고등학교 소식 알리미
+    </div>
+  </header>
+
+  <main class="main-container">
+    <h1>🕓 지난 소식</h1>
+    <div id="past-event-list"></div>
+  </main>
+</body>
+</html>

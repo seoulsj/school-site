@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>관리자 로그인</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .login-container {
+      max-width: 400px;
+      margin: 100px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+    .login-container input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+    }
+    .login-container button {
+      margin-top: 12px;
+      padding: 10px;
+      width: 100%;
+      background-color: #003366;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>🔐 관리자 로그인</h2>
+    <input type="text" id="admin-id" placeholder="아이디 입력" />
+    <input type="password" id="admin-pw" placeholder="비밀번호 입력" />
+    <button onclick="login()">로그인</button>
+  </div>
+
+  <script>
+    const ADMIN_ID = "admin";
+    const ADMIN_PW = "sejong123";
+
+    function login() {
+      const id = document.getElementById("admin-id").value.trim();
+      const pw = document.getElementById("admin-pw").value.trim();
+
+      if (id === ADMIN_ID && pw === ADMIN_PW) {
+        localStorage.setItem("isAdmin", "true");
+        alert("관리자 로그인 성공!");
+        window.location.href = "index.html";
+      } else {
+        alert("아이디 또는 비밀번호가 틀렸습니다.");
+      }
+    }
+  </script>
+</body>
+</html>

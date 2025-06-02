@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>공지사항</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer>
+    function loadNotices() {
+      const notices = JSON.parse(localStorage.getItem("notices")) || [];
+      const list = document.getElementById("notice-list");
+      list.innerHTML = "";
+
+      notices.forEach(notice => {
+        const div = document.createElement("div");
+        div.className = "notice-item";
+        div.innerHTML = `
+          <h3>${notice.title}</h3>
+          <p>${notice.date}</p>
+          <p>${notice.content.slice(0, 80)}...</p>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    window.onload = loadNotices;
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="location.href='index.html'">📢 서울세종고등학교 소식 알리미</div>
+  </header>
+
+  <main class="notice-container">
+    <h1>공지사항</h1>
+    <div id="notice-list"></div>
+  </main>
+</body>
+</html>

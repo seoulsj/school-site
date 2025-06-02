@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>관리자 메뉴</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer>
+    window.onload = () => {
+      if (localStorage.getItem("isAdmin") !== "true") {
+        alert("관리자만 접근 가능합니다.");
+        window.location.href = "index.html";
+      }
+    };
+
+    function logout() {
+      localStorage.removeItem("isAdmin");
+      alert("로그아웃 되었습니다.");
+      window.location.href = "index.html";
+    }
+  </script>
+  <style>
+    .admin-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 400px;
+      margin: 40px auto;
+    }
+    .admin-buttons a,
+    .admin-buttons button {
+      background-color: #003366;
+      color: white;
+      padding: 12px;
+      text-align: center;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="location.href='index.html'">📢 서울세종고등학교 소식 알리미</div>
+  </header>
+
+  <main>
+    <h1 style="text-align:center;">📋 관리자 메뉴</h1>
+    <div class="admin-buttons">
+      <a href="add-event.html">📅 행사 등록</a>
+      <a href="write-notice.html">📢 공지사항 등록</a>
+      <a href="suggest-view.html">💌 익명 건의함 보기</a>
+      <a href="past-board.html">🕓 지난 소식 게시판 보기</a>
+      <button onclick="logout()">🚪 로그아웃</button>
+    </div>
+  </main>
+</body>
+</html>

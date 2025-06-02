@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>글 상세보기</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="location.href='index.html'">
+      📢 서울세종고등학교 소식 알리미
+    </div>
+  </header>
+
+  <main class="post-container">
+    <h2 id="event-title">제목 불러오는 중...</h2>
+    <p><strong>날짜:</strong> <span id="event-date"></span></p>
+    <p id="event-content"></p>
+    <button id="edit-btn">✏ 수정</button>
+    <button id="delete-btn">🗑 삭제</button>
+  </main>
+
+  <script>
+    let eventId = null;
+
+    window.onload = () => {
+      const params = new URLSearchParams(window.location.search);
+      eventId = parseInt(params.get("id"), 10);
+
+      const events = JSON.parse(localStorage.getItem("events") || "[]");
+      const event = events[eventId];
+
+      if (!event) {
+        document.querySelector("main").innerHTML = "<p>해당 글을 찾을 수 없습니다.</p>";
+        return;
+      }
+
+      // 내용 표시
+      document.getElementById("event-title").textContent = event.title;
+      document.getElementById("event-date").textContent = event.date;
+      document.getElementById("event-content").textContent = event.content;
+
+      // 수정 버튼
+      document.getElementById("edit-btn").onclick = () => {
+        location.href = `edit-event.html?id=${eventId}`;
+      };
+
+      // 삭제 버튼
+      document.getElementById("delete-btn").onclick = () => {
+        if (confirm("정말 삭제하시겠습니까?")) {
+          events.splice(eventId, 1);
+          localStorage.setItem("events", JSON.stringify(events));
+          alert("삭제되었습니다.");
+          location.href = "index.html";
+        }
+      };
+    };
+  </script>
+</body>
+</html>

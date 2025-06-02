@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>글쓰기</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("post-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const author = document.getElementById("author").value.trim();
+        const title = document.getElementById("title").value.trim();
+        const content = document.getElementById("content").value.trim();
+
+        if (!author || !title || !content) {
+          return alert("모든 항목을 입력해주세요.");
+        }
+
+        const post = {
+          id: Date.now(),
+          author,
+          title,
+          content,
+          date: new Date().toLocaleString()
+        };
+
+        const posts = JSON.parse(localStorage.getItem("freeboardPosts")) || [];
+        posts.unshift(post);
+        localStorage.setItem("freeboardPosts", JSON.stringify(posts));
+
+        alert("게시글이 등록되었습니다!");
+        window.location.href = "board.html";
+      });
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="location.href='index.html'">📢 서울세종고등학교 소식 알리미</div>
+  </header>
+
+  <main class="write-container">
+    <h1>✍ 자유게시판 글쓰기</h1>
+    <form id="post-form">
+      <label for="author">작성자 이름</label>
+      <input type="text" id="author" required />
+
+      <label for="title">제목</label>
+      <input type="text" id="title" required />
+
+      <label for="content">내용</label>
+      <textarea id="content" rows="10" required></textarea>
+
+      <button type="submit">등록하기</button>
+    </form>
+  </main>
+</body>
+</html>

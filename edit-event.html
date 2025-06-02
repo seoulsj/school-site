@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>행사 수정</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="location.href='index.html'">📢 서울세종고등학교 소식 알리미</div>
+  </header>
+
+  <main class="post-container">
+    <h2>행사 수정</h2>
+    <form id="edit-form">
+      <label>제목: <input type="text" id="edit-title" required></label><br><br>
+      <label>날짜: <input type="date" id="edit-date" required></label><br><br>
+      <label>내용:<br><textarea id="edit-content" rows="6" required></textarea></label><br><br>
+      <label for="event-color">행사 색상</label>
+      <input type="color" id="event-color" name="event-color" />
+      <button type="submit">저장</button>
+    </form>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = parseInt(params.get("id"), 10);
+    const events = JSON.parse(localStorage.getItem("events") || "[]");
+    const event = events[id];
+
+    if (!event) {
+      alert("행사를 찾을 수 없습니다.");
+      location.href = "index.html";
+    }
+
+    document.getElementById("edit-title").value = event.title;
+    document.getElementById("edit-date").value = event.date;
+    document.getElementById("edit-content").value = event.content;
+    document.getElementById("event-color").value = event.color || "#ffd966";
+    event.color = document.getElementById("event-color").value;
+    document.getElementById("edit-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      events[id] = {
+        ...event,
+        title: document.getElementById("edit-title").value,
+        date: document.getElementById("edit-date").value,
+        content: document.getElementById("edit-content").value
+      };
+      localStorage.setItem("events", JSON.stringify(events));
+      alert("행사가 수정되었습니다.");
+      location.href = `event-detail.html?id=${id}`;
+    });
+  </script>
+</body>
+</html>

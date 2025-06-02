@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>자유게시판</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer>
+    function loadPosts() {
+      const posts = JSON.parse(localStorage.getItem("freeboardPosts")) || [];
+      const list = document.getElementById("post-list");
+      const isAdmin = localStorage.getItem("isAdmin") === "true";
+      list.innerHTML = "";
+
+      posts.forEach((post, index) => {
+        const div = document.createElement("div");
+        div.className = "post-item";
+        div.innerHTML = `
+          <h3>${post.title}</h3>
+          <p>작성자: ${post.author} | 작성일: ${post.date}</p>
+          <button onclick="viewPost(${post.id})">자세히 보기</button>
+          ${isAdmin ? `<button onclick="deletePost(${post.id})">삭제</button>` : ""}
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function viewPost(id) {
+      localStorage.setItem("currentPostId", id);
+      window.location.href = "post-detail.html";
+    }
+
+    function deletePost(id) {
+      if (!confirm("정말 삭제하시겠습니까?")) return;
+      let posts = JSON.parse(localStorage.getItem("freeboardPosts")) || [];
+      posts = posts.filter(p => p.id !== id);
+      localStorage.setItem("freeboardPosts", JSON.stringify(posts));
+      loadPosts(); // 다시 로딩
+    }
+
+    window.onload = loadPosts;
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="location.href='index.html'">📢 서울세종고등학교 소식 알리미</div>
+  </header>
+
+  <main class="board-container">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+  <h1>자유게시판</h1>
+  <a href="write-post.html" class="write-link">✍ 글쓰기</a>
+</div>
+<div id="post-list"></div>
+</body>
+</html>

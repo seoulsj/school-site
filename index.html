@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>서울세종고등학교 소식 알리미</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="main.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="location.href='index.html'">📢 서울세종고등학교 소식 알리미</div>
+    <nav class="menu">
+      <a href="upcoming-news.html">다가올 소식</a>
+      <a href="calendar.html">달력</a>
+      <a href="suggest.html">익명 건의함</a>
+      <a href="board.html">자유게시판</a>
+      <a href="notice.html">공지사항</a>
+      <a href="https://seoulsejong.sen.hs.kr/" target="_blank">학교 홈페이지</a>
+      
+      <script>
+      const isAdmin = localStorage.getItem("isAdmin") === "true";
+      const menu = document.querySelector(".menu");
+      
+      const authBtn = document.createElement("a");
+      if (isAdmin) {
+        authBtn.textContent = "🚪 로그아웃";
+        authBtn.href = "#";
+        authBtn.onclick = () => {
+          localStorage.removeItem("isAdmin");
+          alert("로그아웃 되었습니다.");
+          window.location.href = "index.html";
+        };
+        
+        const adminMenu = document.createElement("a");
+        adminMenu.textContent = "📋 관리자 메뉴";
+        adminMenu.href = "admin-panel.html";
+        menu.appendChild(adminMenu);
+      } else {
+        authBtn.textContent = "🔐 관리자 로그인";
+        authBtn.href = "admin-login.html";
+      }
+
+  menu.appendChild(authBtn);
+</script>
+    </nav>
+    <div class="search-box">
+      <input type="text" id="search-input" placeholder="검색어 입력" />
+      <button onclick="searchPosts()">검색</button>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <section>
+      <h2>📌 다가올 소식</h2>
+      <div id="upcoming-news" class="post-preview-list"></div>
+    </section>
+
+    <section>
+      <h2>🗣️ 자유게시판 최근 글</h2>
+      <div id="recent-posts" class="post-preview-list"></div>
+    </section>
+  </main>
+</body>
+</html>

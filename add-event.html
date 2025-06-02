@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>행사 등록</title>
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    window.onload = () => {
+      if (localStorage.getItem("isAdmin") !== "true") {
+        alert("관리자만 접근 가능합니다.");
+        window.location.href = "index.html";
+      }
+    };
+
+    function saveEvent() {
+      const title = document.getElementById("event-title").value.trim();
+      const date = document.getElementById("event-date").value;
+      const content = document.getElementById("event-content").value.trim();
+      const color = document.getElementById("event-color").value;
+
+      if (!title || !date || !content) {
+        alert("모든 항목을 입력해 주세요.");
+        return;
+      }
+
+      const events = JSON.parse(localStorage.getItem("events") || "[]");
+      events.push({ title, date, content, color });
+      localStorage.setItem("events", JSON.stringify(events));
+
+      alert("행사가 등록되었습니다.");
+      window.location.href = "index.html";
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="location.href='index.html'">📢 서울세종고등학교 소식 알리미</div>
+  </header>
+
+  <main class="write-container">
+    <h1>📅 행사 등록</h1>
+    <form onsubmit="event.preventDefault(); saveEvent();">
+      <label for="event-title">제목:</label><br />
+      <input type="text" id="event-title" required /><br /><br />
+
+      <label for="event-date">날짜:</label><br />
+      <input type="date" id="event-date" required /><br /><br />
+
+      <label for="event-content">내용:</label><br />
+      <textarea id="event-content" rows="5" required></textarea><br /><br />
+
+      <label for="event-color">표시 색상:</label><br />
+      <input type="color" id="event-color" value="#ffd966" /><br /><br />
+
+      <button type="submit">등록</button>
+    </form>
+  </main>
+</body>
+</html>

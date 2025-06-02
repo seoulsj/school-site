@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>달력</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="calendar.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="location.href='index.html'">📢 서울세종고등학교 소식 알리미</div>
+    <nav class="menu">
+      <a href="index.html">다가올 소식</a>
+      <a href="calendar.html">달력</a>
+      <a href="suggest.html">익명 건의함</a>
+      <a href="board.html">자유게시판</a>
+      <a href="notice.html">공지사항</a>
+      <a href="https://seoulsejong.sen.hs.kr/" target="_blank">학교 홈페이지</a>
+    </nav>
+    <div class="search-box">
+      <input type="text" id="search-input" placeholder="검색어 입력" />
+      <button onclick="searchPosts()">검색</button>
+    </div>
+  </header>
+
+  <main>
+    <h1>📅 월별 행사 달력</h1>
+    <div class="calendar-nav">
+      <button onclick="prevMonth()">◀</button>
+      <span id="current-month-year"></span>
+      <button onclick="nextMonth()">▶</button>
+    </div>
+    <div class="calendar-container">
+      <table id="calendar">
+        <!-- 달력 테이블이 JS에서 생성됨 -->
+      </table>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>지난 행사 보기</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer>
+    function loadPastEvents() {
+      const events = JSON.parse(localStorage.getItem("events")) || [];
+      const today = new Date();
+      const pastEvents = events.filter(e => new Date(e.date) < today);
+      const list = document.getElementById("past-list");
+
+      pastEvents.forEach(event => {
+        const div = document.createElement("div");
+        div.className = "event-card";
+        div.innerHTML = `
+          <h3>${event.title}</h3>
+          <p>${event.date}</p>
+          <p>${event.content.slice(0, 80)}...</p>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    window.onload = loadPastEvents;
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="location.href='index.html'">📢 서울세종고등학교 소식 알리미</div>
+  </header>
+
+  <main class="past-container">
+    <h1>지난 행사</h1>
+    <div id="past-list"></div>
+  </main>
+</body>
+</html>

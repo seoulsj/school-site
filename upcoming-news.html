@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>다가올 소식</title>
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    window.onload = () => {
+      const container = document.getElementById("upcoming-list");
+      const events = JSON.parse(localStorage.getItem("events") || "[]");
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const upcoming = events.filter(event => {
+        const d = new Date(event.date);
+        d.setHours(0, 0, 0, 0);
+        return d >= today;
+      }).sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      if (upcoming.length === 0) {
+        container.innerHTML = "<p>다가올 행사가 없습니다.</p>";
+        return;
+      }
+
+      upcoming.forEach(event => {
+        const card = document.createElement("div");
+        card.className = "event-card";
+        card.innerHTML = `
+          <h3>${event.title}</h3>
+          <p><strong>날짜:</strong> ${event.date}</p>
+          <p>${event.content}</p>
+        `;
+        if (event.color) {
+          card.style.borderLeft = `6px solid ${event.color}`;
+        }
+
+        if (localStorage.getItem("isAdmin") === "true") {
+  const btnContainer = document.createElement("div");
+
+  const editBtn = document.createElement("button");
+  editBtn.textContent = "✏ 수정";
+  editBtn.onclick = () => {
+    location.href = `edit-event.html?id=${events.indexOf(event)}`;
+  };
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "🗑 삭제";
+  deleteBtn.onclick = () => {
+    if (confirm("정말 삭제하시겠습니까?")) {
+      events.splice(events.indexOf(event), 1);
+      localStorage.setItem("events", JSON.stringify(events));
+      alert("삭제되었습니다.");
+      location.reload();
+    }
+  };
+
+  btnContainer.appendChild(editBtn);
+  btnContainer.appendChild(deleteBtn);
+  card.appendChild(btnContainer);
+}
+        container.appendChild(card);
+      });
+    };
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="location.href='index.html'">📢 서울세종고등학교 소식 알리미</div>
+  </header>
+
+  <main>
+    <h1>📢 다가올 소식</h1>
+    <div id="upcoming-list"></div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>익명 건의함 보기</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (localStorage.getItem("isAdmin") !== "true") {
+        alert("관리자만 접근 가능합니다.");
+        window.location.href = "index.html";
+        return;
+      }
+
+      const container = document.getElementById("suggestions");
+      const suggestions = JSON.parse(localStorage.getItem("suggestions")) || [];
+
+      if (suggestions.length === 0) {
+        container.innerHTML = "<p>등록된 건의사항이 없습니다.</p>";
+        return;
+      }
+
+      suggestions.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "preview-card";
+        div.innerHTML = `
+          <h3>${item.name ? item.name : "익명"}님의 건의</h3>
+          <p><strong>${item.date}</strong></p>
+          <p>${item.content}</p>
+        `;
+        container.appendChild(div);
+      });
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="location.href='index.html'">
+      📢 서울세종고등학교 소식 알리미
+    </div>
+  </header>
+
+  <main class="main-container">
+    <!-- 메뉴바 안 or 페이지 아무 곳에든 -->
+<button onclick="logout()" style="margin-left: 10px;">🚪 로그아웃</button>
+
+<script>
+  function logout() {
+    localStorage.removeItem("isAdmin");
+    alert("로그아웃 되었습니다.");
+    window.location.href = "index.html";
+  }
+</script>
+    <h1>🗳 익명 건의함 열람 (관리자 전용)</h1>
+    <div id="suggestions"></div>
+  </main>
+</body>
+</html>
